@@ -20,6 +20,35 @@ model User {
   @@map("users")
 }
 
+model Organization {
+  id          String             @id @default(uuid()) @db.Uuid
+  name        String
+  slug        String             @unique
+  description String?
+  website     String?
+  githubUrl   String?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  years       OrganizationYear[]
+
+  @@map("organizations")
+}
+
+model OrganizationYear {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @db.Uuid
+  year           Int
+  createdAt      DateTime     @default(now())
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, year])
+  @@index([organizationId])
+  @@index([year])
+  @@map("organization_years")
+}
+
 model DeveloperSkill {
   id        String   @id @default(uuid()) @db.Uuid
   userId    String   @db.Uuid
