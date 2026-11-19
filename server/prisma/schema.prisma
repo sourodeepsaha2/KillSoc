@@ -30,7 +30,8 @@ model Organization {
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
 
-  years       OrganizationYear[]
+  years        OrganizationYear[]
+  repositories Repository[]
 
   @@map("organizations")
 }
@@ -47,6 +48,49 @@ model OrganizationYear {
   @@index([organizationId])
   @@index([year])
   @@map("organization_years")
+}
+
+model Repository {
+  id             String        @id @default(uuid()) @db.Uuid
+  organizationId String?       @db.Uuid
+  githubRepoId   String        @unique
+  name           String
+  fullName       String        @unique
+  description    String?
+  language       String?
+  stars          Int           @default(0)
+  forks          Int           @default(0)
+  openIssues     Int           @default(0)
+  lastUpdatedAt  DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  issues         Issue[]
+
+  @@index([organizationId])
+  @@index([language])
+  @@index([stars])
+  @@map("repositories")
+}
+
+model Issue {
+  id            String     @id @default(uuid()) @db.Uuid
+  repositoryId  String     @db.Uuid
+  githubIssueId String     @unique
+  title         String
+  description   String?
+  url           String
+  state         String
+  labels        String[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  repository    Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+
+  @@index([repositoryId])
+  @@index([state])
+  @@map("issues")
 }
 
 model DeveloperSkill {
