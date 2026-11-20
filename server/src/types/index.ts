@@ -25,6 +25,121 @@ export interface EnvConfig {
   GITHUB_CLIENT_ID?: string;
   GITHUB_CLIENT_SECRET?: string;
   GITHUB_CALLBACK_URL?: string;
+  JWT_SECRET: string;
+  JWT_EXPIRES_IN: string;
+  TOKEN_ENCRYPTION_KEY: string;
   REDIS_URL?: string;
   LLM_API_KEY?: string;
+}
+
+export interface AuthUserPayload {
+  userId: string;
+  githubId: string;
+  username: string;
+}
+
+export interface AuthenticatedUserResponse {
+  id: string;
+  githubId: string;
+  githubUsername: string;
+  email: string | null;
+  avatarUrl: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface GitHubUserProfile {
+  id: number;
+  login: string;
+  email: string | null;
+  avatar_url: string;
+  name: string | null;
+}
+
+export interface GitHubEmail {
+  email: string;
+  primary: boolean;
+  verified: boolean;
+  visibility: string | null;
+}
+
+export interface EncryptedData {
+  ciphertext: string;
+  iv: string;
+  tag: string;
+}
+
+export interface GitHubOrgDTO {
+  login: string;
+  name: string;
+  description: string | null;
+  website: string | null;
+  avatarUrl: string;
+  publicRepos: number;
+  publicMembers?: number;
+  location: string | null;
+  githubUrl: string;
+}
+
+export interface GitHubRepoDTO {
+  githubRepoId: string;
+  name: string;
+  fullName: string;
+  description: string | null;
+  htmlUrl: string;
+  language: string | null;
+  stars: number;
+  forks: number;
+  openIssues: number;
+  defaultBranch: string;
+  createdAt: string;
+  lastUpdatedAt: string | null;
+  isArchived: boolean;
+  isFork: boolean;
+}
+
+export interface GitHubContributorDTO {
+  username: string;
+  avatarUrl: string;
+  profileUrl: string;
+  contributionCount: number;
+}
+
+export interface GitHubCommitDTO {
+  sha: string;
+  message: string;
+  authorName: string;
+  authorUsername: string | null;
+  commitDate: string;
+  commitUrl: string;
+}
+
+export interface PaginationMeta {
+  page: number;
+  perPage: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  nextPage?: number;
+  prevPage?: number;
+}
+
+export interface PaginatedResult<T> {
+  data: T[];
+  pagination: PaginationMeta;
+}
+
+export interface RateLimitInfo {
+  limit: number;
+  remaining: number;
+  reset: number;
+  used?: number;
+  resetTime: string;
+}
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: AuthUserPayload;
+    }
+  }
 }

@@ -2,6 +2,7 @@ import express, { type Express } from 'express';
 import cors, { type CorsOptions } from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 import { env } from './config/env.js';
 import apiRouter from './routes/index.js';
 import { notFoundHandler, errorHandler } from './middleware/error.middleware.js';
@@ -30,6 +31,9 @@ app.use(cors(corsOptions));
 if (env.NODE_ENV !== 'test') {
   app.use(morgan(env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 }
+
+// Cookie parsing middleware
+app.use(cookieParser());
 
 // Request body parsing with appropriate size limit (10mb)
 app.use(express.json({ limit: '10mb' }));
