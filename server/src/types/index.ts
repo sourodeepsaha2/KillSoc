@@ -136,6 +136,85 @@ export interface RateLimitInfo {
   resetTime: string;
 }
 
+export interface DocumentationSignals {
+  hasReadme: boolean;
+  hasDescription: boolean;
+  hasContributing: boolean;
+  hasLicense: boolean;
+  hasCodeOfConduct: boolean;
+  hasIssueTemplates: boolean;
+}
+
+export interface MetricsSummary {
+  commitsCountLast90Days: number;
+  commitsCountLast30Days: number;
+  daysSinceLastCommit: number | null;
+  daysSinceLastPush: number | null;
+  contributorsCount: number;
+  openIssuesCount: number;
+  closedIssuesCount: number;
+  beginnerIssuesCount: number;
+  starsCount: number;
+  forksCount: number;
+  isArchived: boolean;
+  isFork: boolean;
+  documentation: DocumentationSignals;
+}
+
+export interface IntelligenceScores {
+  overall: number;
+  activity: number;
+  community: number;
+  documentation: number;
+  beginner: number;
+  maintenance: number;
+}
+
+export interface IntelligenceExplanations {
+  overall: string[];
+  activity: string[];
+  community: string[];
+  documentation: string[];
+  beginner: string[];
+  maintenance: string[];
+}
+
+export interface RepositoryAnalysisDTO {
+  id?: string;
+  repositoryId?: string;
+  fullName: string;
+  scores: IntelligenceScores;
+  explanations: IntelligenceExplanations;
+  metricsSummary: MetricsSummary;
+  isComplete: boolean;
+  lastAnalyzedAt: string;
+}
+
+export interface GitHubIssueDTO {
+  githubIssueId: string;
+  number: number;
+  title: string;
+  url: string;
+  state: string;
+  labels: string[];
+  body?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  closedAt?: string | null;
+  isBeginnerFriendly: boolean;
+  matchingLabels: string[];
+}
+
+export interface CommunityProfileDTO {
+  healthPercentage: number;
+  hasReadme: boolean;
+  hasContributing: boolean;
+  hasLicense: boolean;
+  hasCodeOfConduct: boolean;
+  hasIssueTemplates: boolean;
+  hasPullRequestTemplates: boolean;
+}
+
 declare global {
   namespace Express {
     interface Request {
