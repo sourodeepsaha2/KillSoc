@@ -1,9 +1,12 @@
 import { githubApiClient, GitHubApiClient } from './github-api.client.js';
+import { isBeginnerLabel } from './intelligence/scoring.config.js';
 import type {
   GitHubOrgDTO,
   GitHubRepoDTO,
   GitHubContributorDTO,
   GitHubCommitDTO,
+  GitHubIssueDTO,
+  CommunityProfileDTO,
   PaginatedResult
 } from '../types/index.js';
 
@@ -60,6 +63,40 @@ interface RawGitHubCommit {
     login: string;
   } | null;
   html_url: string;
+}
+
+interface RawGitHubLabel {
+  id?: number;
+  name: string;
+  color?: string;
+  description?: string;
+}
+
+interface RawGitHubIssue {
+  id: number;
+  number: number;
+  title: string;
+  body: string | null;
+  html_url: string;
+  state: string;
+  labels: (RawGitHubLabel | string)[];
+  created_at: string;
+  updated_at: string;
+  closed_at: string | null;
+  pull_request?: unknown;
+}
+
+interface RawCommunityProfile {
+  health_percentage: number;
+  files: {
+    code_of_conduct?: unknown;
+    code_of_conduct_file?: unknown;
+    contributing?: unknown;
+    issue_template?: unknown;
+    pull_request_template?: unknown;
+    license?: unknown;
+    readme?: unknown;
+  };
 }
 
 export class GitHubResourceService {
@@ -249,6 +286,136 @@ export class GitHubResourceService {
 
     return {
       data: commits,
+      pagination: rawResult.pagination
+    };
+  }
+
+  /**
+   * Checks whether the repository has a README.
+   */
+  async getRepositoryReadme(
+    owner: string,
+    repo: string,
+    accessToken?: string
+  ): Promise<boolean> {
+    try {
+      await this.client.get(
+        `/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/readme`,
+        { accessToken }
+      );
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Fetches community profile documentation metrics (README, CONTRIBUTING, LICENSE, CODE_OF_CONDUCT).
+   */
+  async getRepositoryCommunityProfile(
+    owner: string,
+    repo: string,
+    accessToken?: string
+  ): Promise<CommunityProfileDTO> {
+    try {
+      const { data } = await this.client.get<RawCommunityProfile>(
+        `/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/community/profile`,
+        { accessToken }
+      );
+
+      return {
+        healthPercentage: data.health_percentage ?? 0,
+        hasReadme: Boolean(data.files?.readme),
+        hasContributing: Boolean(data.files?.contributing),
+        hasLicense: Boolean(data.files?.license),
+        hasCodeOfConduct: Boolean(
+          data.files?.code_of_conduct || data.files?.code_of_conduct_file
+        ),
+        hasIssueTemplates: Boolean(data.files?.issue_template),
+        hasPullRequestTemplates: Boolean(data.files?.pull_request_template)
+      };
+    } catch {
+      // Fallback: If community profile returns 404 or fails, test README directly
+      const hasReadme = await this.getRepositoryReadme(owner, repo, accessToken);
+      return {
+        healthPercentage: hasReadme ? 20 : 0,
+        hasReadme,
+        hasContributing: false,
+        hasLicense: false,
+        hasCodeOfConduct: false,
+        hasIssueTemplates: false,
+        hasPullRequestTemplates: false
+      };
+    }
+  }
+
+  /**
+   * Fetches repository issues with pagination, filtering out pull requests,
+   * and tagging beginner-friendly issues.
+   */
+  async getRepositoryIssues(
+    owner: string,
+    repo: string,
+    params: {
+      state?: 'open' | 'closed' | 'all';
+      page?: number;
+      perPage?: number;
+      sort?: 'created' | 'updated' | 'comments';
+      direction?: 'asc' | 'desc';
+      since?: string;
+    } = {},
+    accessToken?: string
+  ): Promise<PaginatedResult<GitHubIssueDTO>> {
+    const {
+      state = 'open',
+      page = 1,
+      perPage = 30,
+      sort = 'updated',
+      direction = 'desc',
+      since
+    } = params;
+
+    const queryParams: Record<string, string | number | undefined> = {
+      state,
+      sort,
+      direction,
+      ...(since ? { since } : {})
+    };
+
+    const rawResult = await this.client.getPaginated<RawGitHubIssue>(
+      `/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/issues`,
+      page,
+      perPage,
+      { accessToken, queryParams }
+    );
+
+    // GitHub returns pull requests in issues endpoint as well; filter them out
+    const issuesOnly = rawResult.data.filter(item => !item.pull_request);
+
+    const mappedIssues: GitHubIssueDTO[] = issuesOnly.map(issue => {
+      const labelNames = (issue.labels || []).map(l =>
+        typeof l === 'string' ? l : l.name
+      );
+      const matchingLabels = labelNames.filter(isBeginnerLabel);
+
+      return {
+        githubIssueId: String(issue.id),
+        number: issue.number,
+        title: issue.title,
+        url: issue.html_url,
+        state: issue.state,
+        labels: labelNames,
+        body: issue.body,
+        createdAt: issue.created_at,
+        updatedAt: issue.updated_at,
+        closedAt: issue.closed_at,
+        isBeginnerFriendly: matchingLabels.length > 0,
+        matchingLabels
+      };
+    });
+
+    return {
+      data: mappedIssues,
       pagination: rawResult.pagination
     };
   }
