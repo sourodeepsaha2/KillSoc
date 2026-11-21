@@ -215,6 +215,74 @@ export interface CommunityProfileDTO {
   hasPullRequestTemplates: boolean;
 }
 
+export type ProficiencyLevel = 'Beginner' | 'Intermediate' | 'Advanced';
+
+export interface DeveloperSkillDTO {
+  id: string;
+  userId: string;
+  skillName: string;
+  proficiency: ProficiencyLevel;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ExtractedRepoSkills {
+  primarySkills: string[];
+  secondarySkills: string[];
+  allSkills: string[];
+}
+
+export interface MatchBreakdown {
+  skillCoverage: number;
+  proficiencyFit: number;
+  repoQualityScore: number;
+  matchedSkills: string[];
+  missingSkills: string[];
+  explanations: string[];
+}
+
+export interface MatchCalculationResult {
+  matchScore: number;
+  breakdown: MatchBreakdown;
+  isComplete: boolean;
+}
+
+export interface RecommendationDTO {
+  id: string;
+  userId: string;
+  repositoryId: string;
+  repositoryName: string;
+  repositoryFullName: string;
+  matchScore: number;
+  skillCoverage: number;
+  proficiencyFit: number;
+  repoQualityScore: number | null;
+  matchedSkills: string[];
+  missingSkills: string[];
+  explanation: string | null;
+  details?: unknown;
+  isComplete: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface RecommendationDetailDTO extends RecommendationDTO {
+  repository: {
+    id: string;
+    name: string;
+    fullName: string;
+    description: string | null;
+    htmlUrl: string;
+    language: string | null;
+    stars: number;
+    forks: number;
+    openIssues: number;
+    topics: string[];
+    extractedSkills: string[];
+    intelligence?: IntelligenceScores;
+  };
+}
+
 declare global {
   namespace Express {
     interface Request {
