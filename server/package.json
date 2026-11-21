@@ -13,7 +13,8 @@
     "prisma:migrate": "prisma migrate dev",
     "test:auth": "tsx src/test-auth.ts",
     "test:github": "tsx src/test-github.ts",
-    "test": "npm run test:auth && npm run test:github"
+    "test:intelligence": "tsx src/test-intelligence.ts",
+    "test": "npm run test:auth && npm run test:github && npm run test:intelligence"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.1",
