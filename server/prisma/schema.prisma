@@ -72,11 +72,36 @@ model Repository {
 
   organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   issues         Issue[]
+  analysis       RepositoryAnalysis?
 
   @@index([organizationId])
   @@index([language])
   @@index([stars])
   @@map("repositories")
+}
+
+model RepositoryAnalysis {
+  id                 String     @id @default(uuid()) @db.Uuid
+  repositoryId       String     @unique @db.Uuid
+  overallScore       Float
+  activityScore      Float
+  communityScore     Float
+  documentationScore Float
+  beginnerScore      Float
+  maintenanceScore   Float
+  explanations       Json
+  metricsSummary     Json
+  isComplete         Boolean    @default(true)
+  lastAnalyzedAt     DateTime   @default(now())
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+
+  repository         Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+
+  @@index([overallScore])
+  @@index([beginnerScore])
+  @@index([lastAnalyzedAt])
+  @@map("repository_analyses")
 }
 
 model Issue {
