@@ -63,16 +63,19 @@ model Repository {
   fullName       String        @unique
   description    String?
   language       String?
-  stars          Int           @default(0)
-  forks          Int           @default(0)
-  openIssues     Int           @default(0)
-  lastUpdatedAt  DateTime?
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  stars           Int                 @default(0)
+  forks           Int                 @default(0)
+  openIssues      Int                 @default(0)
+  topics          String[]            @default([])
+  extractedSkills String[]            @default([])
+  lastUpdatedAt   DateTime?
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
 
-  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
-  issues         Issue[]
-  analysis       RepositoryAnalysis?
+  organization    Organization?       @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  issues          Issue[]
+  analysis        RepositoryAnalysis?
+  recommendations Recommendation[]
 
   @@index([organizationId])
   @@index([language])
@@ -124,33 +127,46 @@ model Issue {
 }
 
 model DeveloperSkill {
-  id        String   @id @default(uuid()) @db.Uuid
-  userId    String   @db.Uuid
-  skillName String
-  createdAt DateTime @default(now())
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @db.Uuid
+  skillName   String
+  proficiency String   @default("Intermediate")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, skillName])
   @@index([userId])
   @@index([skillName])
+  @@index([proficiency])
   @@map("developer_skills")
 }
 
 model Recommendation {
-  id             String       @id @default(uuid()) @db.Uuid
-  userId         String       @db.Uuid
-  organizationId String       @db.Uuid
-  matchScore     Float
-  explanation    String?
-  createdAt      DateTime     @default(now())
+  id               String        @id @default(uuid()) @db.Uuid
+  userId           String        @db.Uuid
+  repositoryId     String        @db.Uuid
+  organizationId   String?       @db.Uuid
+  matchScore       Float
+  skillCoverage    Float         @default(0)
+  proficiencyFit   Float         @default(0)
+  repoQualityScore Float?
+  matchedSkills    String[]      @default([])
+  missingSkills    String[]      @default([])
+  explanation      String?
+  details          Json?
+  isComplete       Boolean       @default(true)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @default(now()) @updatedAt
 
-  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  repository       Repository    @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  organization     Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
 
-  @@unique([userId, organizationId])
+  @@unique([userId, repositoryId])
   @@index([userId])
-  @@index([organizationId])
+  @@index([repositoryId])
   @@index([matchScore])
   @@map("recommendations")
 }
