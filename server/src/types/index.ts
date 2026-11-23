@@ -30,6 +30,12 @@ export interface EnvConfig {
   TOKEN_ENCRYPTION_KEY: string;
   REDIS_URL?: string;
   LLM_API_KEY?: string;
+  AI_PROVIDER?: string;
+  AI_MODEL?: string;
+  AI_API_KEY?: string;
+  AI_MAX_TOKENS?: number;
+  AI_TIMEOUT_MS?: number;
+  AI_CACHE_TTL_HOURS?: number;
 }
 
 export interface AuthUserPayload {
@@ -121,6 +127,8 @@ export interface PaginationMeta {
   hasPrevPage: boolean;
   nextPage?: number;
   prevPage?: number;
+  total?: number;
+  totalPages?: number;
 }
 
 export interface PaginatedResult<T> {
@@ -379,6 +387,117 @@ export interface DiscoveredIssueDTO {
     organizationSlug?: string;
   };
   gsocSuitabilityDisclaimer: string;
+}
+
+export type AiRecommendationType = 'REPOSITORY' | 'CONTRIBUTION';
+
+export interface AiRecommendationSource {
+  repositoryId: string;
+  repositoryName: string;
+  repositoryFullName: string;
+  repositoryUrl: string;
+  issueId?: string;
+  issueNumber?: number;
+  issueTitle?: string;
+  issueUrl?: string;
+  organizationName?: string;
+  organizationSlug?: string;
+  isGSoCOrg?: boolean;
+  gsocYears?: number[];
+  matchScore?: number;
+  citations: string[];
+}
+
+export interface AiRecommendationDTO {
+  id: string;
+  userId: string;
+  recommendationType: AiRecommendationType;
+  repositoryId: string | null;
+  issueId: string | null;
+  summary: string;
+  reasoning: string;
+  matchedSkills: string[];
+  missingSkills: string[];
+  learningCurve: string | null;
+  strengths: string[];
+  concerns: string[];
+  checklist: string[];
+  maintainerQuestions: string[];
+  nextSteps: string[];
+  sources: AiRecommendationSource;
+  provider: string;
+  model: string;
+  isFallback: boolean;
+  isComplete: boolean;
+  isExpired: boolean;
+  expiresAt: string;
+  createdAt: string;
+  updatedAt: string;
+  repository?: {
+    id: string;
+    name: string;
+    fullName: string;
+    htmlUrl: string;
+    language: string | null;
+    stars: number;
+    organizationName?: string;
+  };
+  issue?: {
+    id: string;
+    number: number;
+    title: string;
+    url: string;
+    state: string;
+    isBeginnerFriendly: boolean;
+  };
+}
+
+export interface AiRecommendationDetailDTO extends AiRecommendationDTO {
+  analysis?: RepositoryAnalysisDTO | null;
+  organization?: DiscoveredOrganizationDTO | null;
+}
+
+export interface AiGenerationOptions {
+  maxRepositories?: number;
+  minScore?: number;
+  difficulty?: 'beginner' | 'intermediate' | 'advanced' | 'all';
+  includeGSoC?: boolean;
+  type?: 'REPOSITORY' | 'CONTRIBUTION' | 'ALL';
+  forceRefresh?: boolean;
+}
+
+export interface AiProviderStatusDTO {
+  configured: boolean;
+  provider: string;
+  model: string;
+  healthy: boolean;
+  fallbackEnabled: boolean;
+  cacheTtlHours: number;
+}
+
+export interface AiRepositoryGuidance {
+  summary: string;
+  reasoning: string;
+  matchedSkills: string[];
+  missingSkills: string[];
+  learningCurve: 'Low' | 'Moderate' | 'High';
+  learningCurveExplanation: string;
+  strengths: string[];
+  concerns: string[];
+  nextSteps: string[];
+}
+
+export interface AiContributionGuidance {
+  summary: string;
+  reasoning: string;
+  matchedSkills: string[];
+  missingSkills: string[];
+  learningCurve: 'Low' | 'Moderate' | 'High';
+  requirements: string[];
+  checklist: string[];
+  maintainerQuestions: string[];
+  pitfallsToAvoid: string[];
+  nextSteps: string[];
 }
 
 declare global {

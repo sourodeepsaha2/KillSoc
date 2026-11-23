@@ -55,5 +55,11 @@ export const env: EnvConfig = {
     'dev_insecure_token_encryption_key_at_least_32_characters_long'
   ),
   REDIS_URL: process.env['REDIS_URL'],
-  LLM_API_KEY: process.env['LLM_API_KEY']
+  LLM_API_KEY: process.env['LLM_API_KEY'],
+  AI_PROVIDER: process.env['AI_PROVIDER'] || 'gemini',
+  AI_MODEL: process.env['AI_MODEL'] || 'gemini-1.5-flash',
+  AI_API_KEY: process.env['AI_API_KEY'] || process.env['LLM_API_KEY'],
+  AI_MAX_TOKENS: process.env['AI_MAX_TOKENS'] ? parseInt(process.env['AI_MAX_TOKENS'], 10) : 2048,
+  AI_TIMEOUT_MS: process.env['AI_TIMEOUT_MS'] ? parseInt(process.env['AI_TIMEOUT_MS'], 10) : 15000,
+  AI_CACHE_TTL_HOURS: process.env['AI_CACHE_TTL_HOURS'] ? parseInt(process.env['AI_CACHE_TTL_HOURS'], 10) : 24
 };
