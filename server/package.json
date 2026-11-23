@@ -16,7 +16,8 @@
     "test:intelligence": "tsx src/test-intelligence.ts",
     "test:matching": "tsx src/test-matching.ts",
     "test:discovery": "tsx src/test-discovery.ts",
-    "test": "npm run test:auth && npm run test:github && npm run test:intelligence && npm run test:matching && npm run test:discovery"
+    "test:ai": "tsx src/test-ai.ts",
+    "test": "npm run test:auth && npm run test:github && npm run test:intelligence && npm run test:matching && npm run test:discovery && npm run test:ai"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.1",
