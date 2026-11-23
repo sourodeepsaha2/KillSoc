@@ -36,6 +36,13 @@ export interface EnvConfig {
   AI_MAX_TOKENS?: number;
   AI_TIMEOUT_MS?: number;
   AI_CACHE_TTL_HOURS?: number;
+  REDIS_HOST?: string;
+  REDIS_PORT?: number;
+  REDIS_PASSWORD?: string;
+  REDIS_TLS?: boolean;
+  BULLMQ_CONCURRENCY?: number;
+  BULLMQ_MAX_RETRIES?: number;
+  BULLMQ_BACKOFF_DELAY_MS?: number;
 }
 
 export interface AuthUserPayload {
@@ -498,6 +505,38 @@ export interface AiContributionGuidance {
   maintainerQuestions: string[];
   pitfallsToAvoid: string[];
   nextSteps: string[];
+}
+
+export type JobType =
+  | 'org-sync'
+  | 'repo-analysis'
+  | 'skill-extraction'
+  | 'ai-recommendations'
+  | 'issue-sync';
+
+export type JobStatus = 'waiting' | 'active' | 'completed' | 'failed' | 'delayed';
+
+export interface JobEnqueuedResponseDTO {
+  success: true;
+  message: string;
+  data: {
+    jobId: string;
+    jobType: JobType;
+    status: JobStatus;
+    createdAt: string;
+  };
+}
+
+export interface JobStatusResponseDTO {
+  jobId: string;
+  jobType: JobType;
+  status: JobStatus;
+  progress: number;
+  createdAt: string;
+  processedAt?: string | null;
+  completedAt?: string | null;
+  failedReason?: string | null;
+  result?: unknown;
 }
 
 declare global {

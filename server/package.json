@@ -8,6 +8,7 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
+    "worker": "tsx src/worker.ts",
     "typecheck": "tsc --noEmit",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
@@ -17,16 +18,19 @@
     "test:matching": "tsx src/test-matching.ts",
     "test:discovery": "tsx src/test-discovery.ts",
     "test:ai": "tsx src/test-ai.ts",
-    "test": "npm run test:auth && npm run test:github && npm run test:intelligence && npm run test:matching && npm run test:discovery && npm run test:ai"
+    "test:jobs": "tsx src/test-jobs.ts",
+    "test": "npm run test:auth && npm run test:github && npm run test:intelligence && npm run test:matching && npm run test:discovery && npm run test:ai && npm run test:jobs"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.1",
     "@prisma/client": "^7.10.1",
+    "bullmq": "^6.7.8",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "helmet": "^8.0.0",
+    "ioredis": "^6.1.0",
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.10.0",
     "pg": "^8.23.1"

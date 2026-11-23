@@ -61,5 +61,12 @@ export const env: EnvConfig = {
   AI_API_KEY: process.env['AI_API_KEY'] || process.env['LLM_API_KEY'],
   AI_MAX_TOKENS: process.env['AI_MAX_TOKENS'] ? parseInt(process.env['AI_MAX_TOKENS'], 10) : 2048,
   AI_TIMEOUT_MS: process.env['AI_TIMEOUT_MS'] ? parseInt(process.env['AI_TIMEOUT_MS'], 10) : 15000,
-  AI_CACHE_TTL_HOURS: process.env['AI_CACHE_TTL_HOURS'] ? parseInt(process.env['AI_CACHE_TTL_HOURS'], 10) : 24
+  AI_CACHE_TTL_HOURS: process.env['AI_CACHE_TTL_HOURS'] ? parseInt(process.env['AI_CACHE_TTL_HOURS'], 10) : 24,
+  REDIS_HOST: process.env['REDIS_HOST'] || '127.0.0.1',
+  REDIS_PORT: process.env['REDIS_PORT'] ? parseInt(process.env['REDIS_PORT'], 10) : 6379,
+  REDIS_PASSWORD: process.env['REDIS_PASSWORD'],
+  REDIS_TLS: process.env['REDIS_TLS'] === 'true',
+  BULLMQ_CONCURRENCY: process.env['BULLMQ_CONCURRENCY'] ? parseInt(process.env['BULLMQ_CONCURRENCY'], 10) : 5,
+  BULLMQ_MAX_RETRIES: process.env['BULLMQ_MAX_RETRIES'] ? parseInt(process.env['BULLMQ_MAX_RETRIES'], 10) : 3,
+  BULLMQ_BACKOFF_DELAY_MS: process.env['BULLMQ_BACKOFF_DELAY_MS'] ? parseInt(process.env['BULLMQ_BACKOFF_DELAY_MS'], 10) : 2000
 };
