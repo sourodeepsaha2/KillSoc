@@ -6,6 +6,7 @@ import intelligenceRoutes from './intelligence.routes.js';
 import skillRoutes from './skill.routes.js';
 import matchingRoutes from './matching.routes.js';
 import discoveryRoutes from './discovery.routes.js';
+import aiRoutes from './ai-recommendation.routes.js';
 
 const apiRouter: Router = Router();
 
@@ -16,5 +17,6 @@ apiRouter.use('/intelligence', intelligenceRoutes);
 apiRouter.use('/skills', skillRoutes);
 apiRouter.use('/matching', matchingRoutes);
 apiRouter.use('/discovery', discoveryRoutes);
+apiRouter.use('/ai', aiRoutes);
 
 export default apiRouter;
