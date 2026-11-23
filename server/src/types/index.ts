@@ -283,6 +283,104 @@ export interface RecommendationDetailDTO extends RecommendationDTO {
   };
 }
 
+export interface GSoCOrgImportInput {
+  name: string;
+  year: number;
+  slug?: string;
+  description?: string;
+  website?: string;
+  githubUrl?: string;
+  category?: string;
+  topics?: string[] | string;
+  imageUrl?: string;
+  sourceUrl?: string;
+  projectsUrl?: string;
+  ideasUrl?: string;
+}
+
+export interface GSoCImportResult {
+  totalProcessed: number;
+  organizationsCreated: number;
+  organizationsUpdated: number;
+  yearsAdded: number;
+  errors: Array<{ item: string; error: string }>;
+}
+
+export interface DiscoveredOrganizationDTO {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  website: string | null;
+  githubUrl: string | null;
+  category: string | null;
+  topics: string[];
+  imageUrl: string | null;
+  years: number[];
+  repositoryCount: number;
+  averageQualityScore: number | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DiscoveredRepoDTO {
+  id: string;
+  name: string;
+  fullName: string;
+  description: string | null;
+  htmlUrl: string;
+  language: string | null;
+  stars: number;
+  forks: number;
+  openIssues: number;
+  topics: string[];
+  extractedSkills: string[];
+  lastUpdatedAt: string | null;
+  intelligence?: {
+    overallScore: number;
+    activityScore: number;
+    communityScore: number;
+    documentationScore: number;
+    beginnerScore: number;
+    maintenanceScore: number;
+  };
+  userMatch?: {
+    matchScore: number;
+    skillCoverage: number;
+    proficiencyFit: number;
+    matchedSkills: string[];
+    missingSkills: string[];
+    explanations: string[];
+  };
+}
+
+export interface DiscoveredIssueDTO {
+  id: string;
+  githubIssueId: string;
+  number: number;
+  title: string;
+  description: string | null;
+  url: string;
+  state: string;
+  labels: string[];
+  isBeginnerFriendly: boolean;
+  matchingLabels: string[];
+  assignee: string | null;
+  commentsCount: number;
+  createdAt: string;
+  updatedAt: string;
+  repository: {
+    id: string;
+    name: string;
+    fullName: string;
+    language: string | null;
+    stars: number;
+    organizationName?: string;
+    organizationSlug?: string;
+  };
+  gsocSuitabilityDisclaimer: string;
+}
+
 declare global {
   namespace Express {
     interface Request {

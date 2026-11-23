@@ -1,4 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
+import { prisma } from '../config/prisma.js';
 import { ApiError } from '../utils/apiError.js';
 import { verifyAuthToken, JWT_COOKIE_NAME } from '../utils/jwt.js';
 
@@ -67,4 +68,43 @@ export const optionalAuth = (
   }
 
   next();
+};
+
+/**
+ * Middleware that requires administrative privileges.
+ * Returns HTTP 401 if unauthenticated, or HTTP 403 if authenticated user is not an admin.
+ */
+export const requireAdmin = async (
+  req: Request,
+  _res: Response,
+  next: NextFunction
+): Promise<void> => {
+  const token = extractToken(req);
+
+  if (!token) {
+    return next(ApiError.unauthorized('Authentication required'));
+  }
+
+  try {
+    const payload = verifyAuthToken(token);
+    req.user = payload;
+
+    const user = await prisma.user.findUnique({
+      where: { id: payload.userId },
+      select: { role: true, isAdmin: true, githubUsername: true }
+    });
+
+    if (!user || (!user.isAdmin && user.role !== 'ADMIN')) {
+      return next(
+        ApiError.forbidden('Administrative permission required to perform this action')
+      );
+    }
+
+    next();
+  } catch (error) {
+    if (error instanceof ApiError) {
+      return next(error);
+    }
+    next(ApiError.unauthorized('Invalid or expired authentication token'));
+  }
 };
