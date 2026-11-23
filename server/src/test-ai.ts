@@ -30,8 +30,6 @@ async function runTests() {
   let userAToken = '';
   let userBToken = '';
   let testRepoId = '';
-  let openIssueId = '';
-  let closedIssueId = '';
   let testOrgId = '';
 
   const mockProvider = new MockAiProvider();
@@ -247,7 +245,6 @@ async function runTests() {
         commentsCount: 1
       }
     });
-    openIssueId = openIssue.id;
 
     // Create Closed Issue (Should NEVER be recommended)
     const closedIssue = await prisma.issue.create({
@@ -264,7 +261,6 @@ async function runTests() {
         closedAt: new Date()
       }
     });
-    closedIssueId = closedIssue.id;
 
     // Create Test User A (with skills)
     const userA = await prisma.user.create({
