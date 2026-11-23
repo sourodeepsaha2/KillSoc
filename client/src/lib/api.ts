@@ -157,13 +157,24 @@ export const discoveryApi = {
 
     const res = await request<{
       success: boolean;
-      data: DiscoveredRepository[];
-      pagination: any;
+      data: any;
+      pagination?: any;
     }>(`/discovery/organizations/${encodeURIComponent(slug)}/repos?${q.toString()}`);
 
+    const repoList = Array.isArray(res.data)
+      ? res.data
+      : Array.isArray(res.data?.repositories)
+      ? res.data.repositories
+      : [];
+
     return {
-      data: res.data,
-      pagination: res.pagination
+      data: repoList,
+      pagination: res.pagination || {
+        page: params?.page || 1,
+        perPage: params?.perPage || 20,
+        hasNextPage: false,
+        hasPrevPage: false
+      }
     };
   },
 
@@ -237,7 +248,7 @@ export const intelligenceApi = {
 
   refreshAnalysis: async (owner: string, repo: string): Promise<RepositoryAnalysis> => {
     const res = await request<{ success: boolean; data: RepositoryAnalysis }>(
-      `/intelligence/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/refresh`,
+      `/intelligence/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/analyze`,
       { method: 'POST' }
     );
     return res.data;

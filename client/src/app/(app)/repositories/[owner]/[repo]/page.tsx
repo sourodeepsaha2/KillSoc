@@ -111,6 +111,10 @@ export default function RepositoryDetailPage({
   }
 
   async function handleQueueBackgroundJob() {
+    if (!isAuthenticated) {
+      showToast('Please sign in with GitHub to enqueue background analysis jobs.', 'info');
+      return;
+    }
     try {
       showToast('Enqueuing asynchronous repository analysis job...', 'info');
       await jobsApi.analyzeRepo(owner, repo, true);

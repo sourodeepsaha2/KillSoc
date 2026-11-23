@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Input } from '@/components/ui/Input';
 import { Modal } from '@/components/ui/Modal';
 import { useToast } from '@/contexts/ToastContext';
+import { useAuth } from '@/contexts/AuthContext';
 import {
   Cpu,
   RefreshCw,
@@ -30,6 +31,7 @@ const STORAGE_KEY = 'killsoc_tracked_job_ids';
 
 export default function JobsPage() {
   const { showToast } = useToast();
+  const { isAuthenticated } = useAuth();
 
   const [trackedJobs, setTrackedJobs] = useState<JobStatusResponse[]>([]);
   const [lookupJobId, setLookupJobId] = useState<string>('');
@@ -98,6 +100,10 @@ export default function JobsPage() {
 
   async function handleLookup(e?: React.FormEvent) {
     if (e) e.preventDefault();
+    if (!isAuthenticated) {
+      showToast('Please sign in with GitHub to inspect background jobs.', 'info');
+      return;
+    }
     if (!lookupJobId.trim()) return;
 
     setIsLookingUp(true);
@@ -118,6 +124,10 @@ export default function JobsPage() {
   }
 
   async function handleEnqueueJob() {
+    if (!isAuthenticated) {
+      showToast('Please sign in with GitHub to dispatch background jobs.', 'info');
+      return;
+    }
     setIsEnqueueing(true);
     try {
       let res: { jobId: string; jobType: string; status: string };

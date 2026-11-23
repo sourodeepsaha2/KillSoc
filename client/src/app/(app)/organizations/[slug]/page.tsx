@@ -14,6 +14,7 @@ import { ScoreIndicator } from '@/components/ui/ScoreIndicator';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useToast } from '@/contexts/ToastContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { Github } from '@/components/ui/Icons';
 import {
   Layers,
@@ -42,6 +43,7 @@ export default function OrganizationDetailPage({
   const slug = resolvedParams.slug;
   const router = useRouter();
   const { showToast } = useToast();
+  const { isAuthenticated } = useAuth();
 
   const [org, setOrg] = useState<DiscoveredOrganization | null>(null);
   const [repos, setRepos] = useState<DiscoveredRepository[]>([]);
@@ -98,6 +100,10 @@ export default function OrganizationDetailPage({
   }
 
   async function handleSyncRepositories() {
+    if (!isAuthenticated) {
+      showToast('Please sign in with GitHub to synchronize repositories.', 'info');
+      return;
+    }
     setIsSyncing(true);
     try {
       showToast(`Initiating repository synchronization for ${slug}...`, 'info');
