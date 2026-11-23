@@ -22,6 +22,7 @@ model User {
 
   skills          DeveloperSkill[]
   recommendations Recommendation[]
+  aiRecommendations AiRecommendation[]
 
   @@index([role])
   @@map("users")
@@ -88,6 +89,7 @@ model Repository {
   issues          Issue[]
   analysis        RepositoryAnalysis?
   recommendations Recommendation[]
+  aiRecommendations AiRecommendation[]
 
   @@index([organizationId])
   @@index([language])
@@ -138,6 +140,7 @@ model Issue {
   updatedAt          DateTime   @updatedAt
 
   repository         Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  aiRecommendations  AiRecommendation[]
 
   @@index([repositoryId])
   @@index([state])
@@ -189,4 +192,41 @@ model Recommendation {
   @@index([repositoryId])
   @@index([matchScore])
   @@map("recommendations")
+}
+
+model AiRecommendation {
+  id                  String      @id @default(uuid()) @db.Uuid
+  userId              String      @db.Uuid
+  recommendationType  String      // "REPOSITORY" | "CONTRIBUTION"
+  repositoryId        String?     @db.Uuid
+  issueId             String?     @db.Uuid
+  summary             String
+  reasoning           String
+  matchedSkills       String[]    @default([])
+  missingSkills       String[]    @default([])
+  learningCurve       String?
+  strengths           String[]    @default([])
+  concerns            String[]    @default([])
+  checklist           String[]    @default([])
+  maintainerQuestions String[]    @default([])
+  nextSteps           String[]    @default([])
+  sources             Json
+  provider            String
+  model               String
+  isFallback          Boolean     @default(false)
+  isComplete          Boolean     @default(true)
+  expiresAt           DateTime
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+
+  user                User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  repository          Repository? @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  issue               Issue?      @relation(fields: [issueId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([recommendationType])
+  @@index([repositoryId])
+  @@index([issueId])
+  @@index([expiresAt])
+  @@map("ai_recommendations")
 }
