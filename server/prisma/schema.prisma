@@ -12,6 +12,8 @@ model User {
   githubUsername       String            @unique
   email                String?
   avatarUrl            String?
+  role                 String            @default("DEVELOPER")
+  isAdmin              Boolean           @default(false)
   encryptedAccessToken String?
   tokenIv              String?
   tokenTag             String?
@@ -21,6 +23,7 @@ model User {
   skills          DeveloperSkill[]
   recommendations Recommendation[]
 
+  @@index([role])
   @@map("users")
 }
 
@@ -31,6 +34,10 @@ model Organization {
   description String?
   website     String?
   githubUrl   String?
+  category    String?
+  topics      String[]           @default([])
+  imageUrl    String?
+  sourceUrl   String?
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
 
@@ -38,6 +45,8 @@ model Organization {
   repositories    Repository[]
   recommendations Recommendation[]
 
+  @@index([name])
+  @@index([category])
   @@map("organizations")
 }
 
@@ -45,6 +54,9 @@ model OrganizationYear {
   id             String       @id @default(uuid()) @db.Uuid
   organizationId String       @db.Uuid
   year           Int
+  projectsUrl    String?
+  ideasUrl       String?
+  topics         String[]     @default([])
   createdAt      DateTime     @default(now())
 
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -108,21 +120,29 @@ model RepositoryAnalysis {
 }
 
 model Issue {
-  id            String     @id @default(uuid()) @db.Uuid
-  repositoryId  String     @db.Uuid
-  githubIssueId String     @unique
-  title         String
-  description   String?
-  url           String
-  state         String
-  labels        String[]
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  id                 String     @id @default(uuid()) @db.Uuid
+  repositoryId       String     @db.Uuid
+  githubIssueId      String     @unique
+  number             Int?
+  title              String
+  description        String?
+  url                String
+  state              String
+  labels             String[]
+  isBeginnerFriendly Boolean    @default(false)
+  matchingLabels     String[]   @default([])
+  assignee           String?
+  commentsCount      Int        @default(0)
+  closedAt           DateTime?
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
 
-  repository    Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
+  repository         Repository @relation(fields: [repositoryId], references: [id], onDelete: Cascade)
 
   @@index([repositoryId])
   @@index([state])
+  @@index([isBeginnerFriendly])
+  @@index([number])
   @@map("issues")
 }
 
