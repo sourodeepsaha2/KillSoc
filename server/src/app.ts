@@ -9,6 +9,9 @@ import { notFoundHandler, errorHandler } from './middleware/error.middleware.js'
 
 const app: Express = express();
 
+// Trust reverse proxy headers (required for Render / Cloudflare / Vercel HTTPS cookies)
+app.set('trust proxy', 1);
+
 // Security headers
 app.use(helmet());
 
@@ -19,6 +22,8 @@ const corsOptions: CorsOptions = {
     if (!origin) return callback(null, true);
     if (env.NODE_ENV === 'development') return callback(null, true);
     if (origin === env.CLIENT_URL) return callback(null, true);
+    // Allow Vercel preview and production domains
+    if (origin.endsWith('.vercel.app')) return callback(null, true);
     return callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
