@@ -1,6 +1,15 @@
 import app from './app.js';
 import { env } from './config/env.js';
 import { prisma } from './config/prisma.js';
+import { JobWorker } from './jobs/job.worker.js';
+import { closeRedisConnection } from './jobs/redis.connection.js';
+
+let embeddedWorker: JobWorker | null = null;
+if (process.env.RUN_WORKER === 'true' || process.env.EMBED_WORKER === 'true') {
+  console.log('[KillSoc API] RUN_WORKER is enabled. Starting embedded background worker...');
+  embeddedWorker = new JobWorker();
+  embeddedWorker.start();
+}
 
 const server = app.listen(env.PORT, () => {
   console.log(`[KillSoc API] Server listening on port ${env.PORT} in ${env.NODE_ENV} mode`);
@@ -11,7 +20,17 @@ const server = app.listen(env.PORT, () => {
 // Graceful shutdown handlers
 const handleShutdown = async (signal: string): Promise<void> => {
   console.log(`[KillSoc API] Received ${signal}. Initiating graceful shutdown...`);
-  
+
+  if (embeddedWorker) {
+    try {
+      await embeddedWorker.close();
+      await closeRedisConnection();
+      console.log('[KillSoc API] Embedded worker shut down cleanly.');
+    } catch (err) {
+      console.error('[KillSoc API] Error shutting down embedded worker:', err);
+    }
+  }
+
   server.close(async () => {
     try {
       await prisma.$disconnect();
