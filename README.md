@@ -170,3 +170,16 @@ npm run build              # Next.js optimized production build
 - **Role-Based Access Control**: Administrative tasks such as batch GSoC organization ingestion require `ADMIN` role authentication.
 - **Error Sanitization**: Background worker logs and API error handlers sanitize failure reasons, replacing sensitive tokens and Bearer headers with `[REDACTED]`.
 - **Zero-Hallucination Heuristics**: AI recommendation models are grounded in database telemetry; closed issues are excluded, and repositories/mentors are strictly validated against indexed GitHub data.
+
+---
+
+## Deployment Guide (Render & Vercel)
+
+KillSoc is architected for seamless multi-cloud production deployment:
+- **Frontend**: Next.js App Router deployed on [Vercel](https://vercel.com)
+- **Backend & Worker**: Express.js API & BullMQ Background Worker deployed on [Render](https://render.com)
+- **Database**: Managed PostgreSQL on Render (or Supabase / Neon)
+- **Cache & Queues**: Managed Redis on Render (or Upstash Redis)
+
+See the root `render.yaml` for 1-click Blueprint deployment. Detailed step-by-step setup guides, environment variables, CORS, and cross-site cookie settings are documented below.
+
