@@ -128,7 +128,7 @@ export default function DashboardPage() {
               <span>Intelligence Platform Active</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
-              {isAuthenticated ? `Welcome back, ${user?.githubUsername}` : 'Welcome to KillSoc'}
+              {isAuthenticated ? `Welcome back, ${user?.githubUsername}` : 'Welcome to AceSoc'}
             </h1>
             <p className="mt-1 text-sm text-slate-400 max-w-2xl">
               Evaluate GSoC organizations, track repository health metrics, and identify your optimal open-source contribution pathways.

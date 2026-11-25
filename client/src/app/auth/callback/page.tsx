@@ -28,7 +28,7 @@ function CallbackContent() {
       try {
         await refreshUser();
         if (isMounted) {
-          showToast('Welcome back to KillSoc!', 'success');
+          showToast('Welcome back to AceSoc!', 'success');
           router.replace('/dashboard');
         }
       } catch (err: any) {

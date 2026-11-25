@@ -56,7 +56,7 @@ export class GitHubService {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         Accept: 'application/vnd.github.v3+json',
-        'User-Agent': 'KillSoc-App'
+        'User-Agent': 'AceSoc-App'
       }
     });
 
@@ -76,7 +76,7 @@ export class GitHubService {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           Accept: 'application/vnd.github.v3+json',
-          'User-Agent': 'KillSoc-App'
+          'User-Agent': 'AceSoc-App'
         }
       });
 

@@ -3,7 +3,7 @@ import { closeRedisConnection } from './jobs/redis.connection.js';
 import { prisma } from './config/prisma.js';
 import { env } from './config/env.js';
 
-console.log(`Starting KillSoc background worker process (concurrency: ${env.BULLMQ_CONCURRENCY})...`);
+console.log(`Starting AceSoc background worker process (concurrency: ${env.BULLMQ_CONCURRENCY})...`);
 
 const worker = new JobWorker();
 worker.start();

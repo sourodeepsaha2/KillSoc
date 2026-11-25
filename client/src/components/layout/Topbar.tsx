@@ -43,7 +43,7 @@ export function Topbar({ onOpenMobile }: TopbarProps) {
             href="/dashboard"
             className="hover:text-slate-200 transition-colors font-medium text-slate-300"
           >
-            KillSoc
+            AceSoc
           </Link>
           {breadcrumbs.map((crumb, idx) => (
             <React.Fragment key={crumb.href}>

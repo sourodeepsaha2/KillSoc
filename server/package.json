@@ -1,7 +1,7 @@
 {
-  "name": "killsoc-server",
+  "name": "acesoc-server",
   "version": "1.0.0",
-  "description": "KillSoc API - AI-powered GSoC organization and open-source contribution intelligence platform",
+  "description": "AceSoc API - AI-powered GSoC organization and open-source contribution intelligence platform",
   "type": "module",
   "main": "dist/server.js",
   "scripts": {

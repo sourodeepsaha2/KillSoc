@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'KillSoc — Open-Source Contribution Intelligence',
+  title: 'AceSoc — Open-Source Contribution Intelligence',
   description: 'Discover GSoC organizations, evaluate repository intelligence, match skills, and receive grounded AI contribution guidance.',
   icons: {
     icon: '/favicon.ico'

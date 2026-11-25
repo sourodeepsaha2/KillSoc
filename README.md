@@ -1,15 +1,15 @@
-# KillSoc — AI-Powered Open-Source Contribution Intelligence Platform
+# AceSoc — AI-Powered Open-Source Contribution Intelligence Platform
 
-> *"Find. Analyze. Contribute. Conquer."*
+> *"Find. Analyze. Contribute. Ace."*
 
-KillSoc is a production-grade developer platform designed to help engineers discover Google Summer of Code (GSoC) organizations, evaluate open-source repository health through transparent explainability heuristics, manage technical skill profiles, match with suitable codebases, and receive grounded AI-powered contribution recommendations.
+AceSoc is a production-grade developer platform designed to help engineers discover Google Summer of Code (GSoC) organizations, evaluate open-source repository health through transparent explainability heuristics, manage technical skill profiles, match with suitable codebases, and receive grounded AI-powered contribution recommendations.
 
 ---
 
 ## Architecture Overview
 
 ```
-KillSoc Platform
+AceSoc Platform
 ├── client/                      # Next.js 16 (App Router) + TypeScript + Tailwind CSS
 │   ├── src/app/                 # 13 Application Routes & Layouts
 │   ├── src/components/ui/       # Design System (Linear/Vercel inspired dark theme)

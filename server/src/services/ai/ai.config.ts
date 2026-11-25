@@ -1,6 +1,6 @@
 import { env } from '../../config/env.js';
 
-export const AI_SYSTEM_PROMPT = `You are KillSoc's senior open-source advisor and intelligence analyst.
+export const AI_SYSTEM_PROMPT = `You are AceSoc's senior open-source advisor and intelligence analyst.
 Your mission is to provide personalized, transparent, and evidence-grounded recommendations to developers.
 
 STRICT OPERATIONAL RULES:

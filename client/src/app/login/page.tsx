@@ -31,7 +31,7 @@ function LoginContent() {
           <div className="w-8 h-8 rounded-lg bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 group-hover:scale-105 transition-transform">
             <Terminal className="w-4 h-4" />
           </div>
-          <span className="font-semibold text-lg tracking-tight text-white">KillSoc</span>
+          <span className="font-semibold text-lg tracking-tight text-white">AceSoc</span>
         </Link>
         <Link
           href="/"
@@ -53,10 +53,10 @@ function LoginContent() {
               <Sparkles className="w-6 h-6" />
             </div>
             <h1 className="text-2xl font-bold tracking-tight text-white mb-2">
-              Welcome to KillSoc
+              Welcome to AceSoc
             </h1>
             <p className="text-sm text-slate-400">
-              Find. Analyze. Contribute. Conquer.
+              Find. Analyze. Contribute. Ace.
             </p>
           </div>
 
@@ -68,7 +68,7 @@ function LoginContent() {
                 <p className="font-medium text-red-200">Authentication Failed</p>
                 <p className="text-xs text-red-300/80 mt-1">
                   {error === 'access_denied'
-                    ? 'GitHub authorization was declined. Please authorize KillSoc to continue.'
+                    ? 'GitHub authorization was declined. Please authorize AceSoc to continue.'
                     : error}
                 </p>
               </div>
@@ -124,7 +124,7 @@ function LoginContent() {
 
       {/* Footer */}
       <footer className="text-center text-xs text-slate-600">
-        &copy; {new Date().getFullYear()} KillSoc Intelligence Engine. Built for GSoC contributors.
+        &copy; {new Date().getFullYear()} AceSoc Intelligence Engine. Built for GSoC contributors.
       </footer>
     </div>
   );

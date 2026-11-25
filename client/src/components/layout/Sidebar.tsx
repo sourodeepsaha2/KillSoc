@@ -67,12 +67,12 @@ export function Sidebar({
             className="flex items-center gap-2.5 overflow-hidden"
           >
             <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-black text-sm tracking-wider shadow-sm shadow-indigo-950 shrink-0">
-              KS
+              AS
             </div>
             {(!isCollapsed || isMobile) && (
               <div className="flex flex-col">
                 <span className="font-bold text-sm tracking-tight text-white flex items-center gap-1.5">
-                  KillSoc
+                  AceSoc
                   <span className="text-[10px] font-mono font-medium px-1.5 py-0.2 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
                     BETA
                   </span>

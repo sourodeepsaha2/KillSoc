@@ -3,23 +3,23 @@ version: '3.8'
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: killsoc-postgres
+    container_name: acesoc-postgres
     restart: always
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-killsoc}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-killsoc_secure_password}
-      POSTGRES_DB: ${POSTGRES_DB:-killsoc}
+      POSTGRES_USER: ${POSTGRES_USER:-acesoc}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-acesoc_secure_password}
+      POSTGRES_DB: ${POSTGRES_DB:-acesoc}
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-killsoc} -d ${POSTGRES_DB:-killsoc}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-acesoc} -d ${POSTGRES_DB:-acesoc}"]
       interval: 5s
       timeout: 5s
       retries: 5
 
   redis:
     image: redis:7-alpine
-    container_name: killsoc-redis
+    container_name: acesoc-redis
     restart: always
     command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis_secure_password}
     volumes:
@@ -34,7 +34,7 @@ services:
     build:
       context: ./server
       dockerfile: Dockerfile
-    container_name: killsoc-api
+    container_name: acesoc-api
     restart: always
     depends_on:
       postgres:
@@ -44,7 +44,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 5001
-      DATABASE_URL: postgresql://${POSTGRES_USER:-killsoc}:${POSTGRES_PASSWORD:-killsoc_secure_password}@postgres:5432/${POSTGRES_DB:-killsoc}?schema=public
+      DATABASE_URL: postgresql://${POSTGRES_USER:-acesoc}:${POSTGRES_PASSWORD:-acesoc_secure_password}@postgres:5432/${POSTGRES_DB:-acesoc}?schema=public
       REDIS_URL: redis://:${REDIS_PASSWORD:-redis_secure_password}@redis:6379
       CLIENT_URL: ${CLIENT_URL:-https://yourdomain.com}
       GITHUB_CLIENT_ID: ${GITHUB_CLIENT_ID}
@@ -65,7 +65,7 @@ services:
       dockerfile: Dockerfile
       args:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://yourdomain.com/api}
-    container_name: killsoc-client
+    container_name: acesoc-client
     restart: always
     depends_on:
       - api

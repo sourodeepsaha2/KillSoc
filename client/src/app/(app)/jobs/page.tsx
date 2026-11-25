@@ -27,7 +27,7 @@ import {
 import { formatRelativeTime } from '@/lib/utils';
 
 // Local storage key for persistent job monitoring across navigation
-const STORAGE_KEY = 'killsoc_tracked_job_ids';
+const STORAGE_KEY = 'acesoc_tracked_job_ids';
 
 export default function JobsPage() {
   const { showToast } = useToast();

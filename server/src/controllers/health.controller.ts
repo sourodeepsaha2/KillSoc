@@ -5,7 +5,7 @@ import { prisma } from '../config/prisma.js';
 export const getHealth = (_req: Request, res: Response<HealthResponse>): void => {
   res.status(200).json({
     success: true,
-    message: 'KillSoc API is running',
+    message: 'AceSoc API is running',
     timestamp: new Date().toISOString()
   });
 };

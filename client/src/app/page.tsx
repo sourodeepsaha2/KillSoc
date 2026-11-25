@@ -27,10 +27,10 @@ export default function LandingPage() {
       <header className="h-16 border-b border-[#181c28] bg-[#090a0f]/90 backdrop-blur-md sticky top-0 z-40 px-6 lg:px-12 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-black text-sm tracking-wider shadow-sm shadow-indigo-950">
-            KS
+            AS
           </div>
           <span className="font-bold text-base tracking-tight text-white flex items-center gap-2">
-            KillSoc
+            AceSoc
             <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
               V1.0
             </span>
@@ -119,7 +119,7 @@ export default function LandingPage() {
               <div className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
               <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
               <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
-              <span className="ml-2 font-mono text-[11px] text-slate-500">killsoc.dev / dashboard</span>
+              <span className="ml-2 font-mono text-[11px] text-slate-500">acesoc.dev / dashboard</span>
             </div>
             <div className="flex items-center gap-3 font-mono text-[11px]">
               <span className="text-emerald-400 flex items-center gap-1">
@@ -198,7 +198,7 @@ export default function LandingPage() {
             Engineered for deliberate open-source growth.
           </h2>
           <p className="text-xs sm:text-sm text-slate-400 mt-2">
-            KillSoc replaces random GitHub browsing with data-driven evaluation and structured contribution paths.
+            AceSoc replaces random GitHub browsing with data-driven evaluation and structured contribution paths.
           </p>
         </div>
 
@@ -252,7 +252,7 @@ export default function LandingPage() {
             WORKFLOW
           </span>
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white mt-1">
-            How KillSoc guides your contribution journey
+            How AceSoc guides your contribution journey
           </h2>
         </div>
 
@@ -304,10 +304,10 @@ export default function LandingPage() {
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 rounded bg-indigo-600 flex items-center justify-center text-white font-black text-xs">
-              KS
+              AS
             </div>
-            <span className="font-semibold text-slate-300">KillSoc</span>
-            <span className="text-slate-500">— Find. Analyze. Contribute. Conquer.</span>
+            <span className="font-semibold text-slate-300">AceSoc</span>
+            <span className="text-slate-500">— Find. Analyze. Contribute. Ace.</span>
           </div>
           <div className="flex items-center gap-6">
             <Link href="/organizations" className="hover:text-slate-200 transition-colors">

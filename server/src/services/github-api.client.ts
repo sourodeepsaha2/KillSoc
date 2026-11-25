@@ -74,7 +74,7 @@ export class GitHubApiClient {
     const headers: Record<string, string> = {
       Accept: 'application/vnd.github.v3+json',
       'X-GitHub-Api-Version': this.apiVersion,
-      'User-Agent': 'KillSoc-App'
+      'User-Agent': 'AceSoc-App'
     };
 
     if (accessToken) {
